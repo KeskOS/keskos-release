@@ -1,13 +1,42 @@
 # keskos-release
 
-KeskOS release metadata files
+`keskos-release` packages the release metadata files that identify a machine as KeskOS and expose build/channel details to user-space tools.
 
-This repository contains the standalone Arch package source for `keskos-release`.
+## What this is
 
-## Contents
+This repository builds the package that drops simple release-identification files into `/etc` and `/usr/lib/keskos` so apps and scripts can query distro version, channel, and build metadata.
 
-- `PKGBUILD`
-- `files/` for packaged assets, scripts, themes, or source snapshots where needed
+## Role in KeskOS
+
+Release metadata package.
+
+## Package name
+
+```txt
+Package: keskos-release
+Repo: [keskos]
+Architecture: any
+```
+
+## What it installs or provides
+
+- Installs `/etc/keskos-release`.
+- Installs `/usr/lib/keskos/version`, `/usr/lib/keskos/channel`, and `/usr/lib/keskos/build-id`.
+- Does not install commands or services; it is a metadata package.
+
+## Commands and launchers
+
+- This package does not install standalone commands or GUI launchers.
+
+## Config, logs, and state
+
+- `/etc/keskos-release` is a pacman backup file and may be preserved across upgrades.
+- No logs or systemd units are shipped by this package.
+
+## Dependencies
+
+- No runtime dependencies are declared.
+- Build with `makepkg -s --noconfirm`.
 
 ## Build
 
@@ -15,9 +44,15 @@ This repository contains the standalone Arch package source for `keskos-release`
 makepkg -s --noconfirm
 ```
 
-## Package Metadata
+## Packaging notes
 
-- Version: `0.1.0`
-- Architectures: `any`
+- This package is intentionally tiny and should remain easy for scripts to consume.
+- Use it as the canonical place for distro release metadata rather than duplicating version files elsewhere.
 
-This repo is intended to be consumed by the KeskOS package build server and can also be built locally with standard Arch tooling.
+## Troubleshooting
+
+- If a tool reports the wrong distro version, inspect `/etc/keskos-release` and `/usr/lib/keskos/*` after reinstalling the package.
+
+## Docs website export notes
+
+- Docs site usage: distro identity metadata reference and file-format note.
